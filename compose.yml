@@ -18,8 +18,8 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}  # Set PostgreSQL user
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}  # Set PostgreSQL password
       - POSTGRES_DB=${POSTGRES_DB}      # Set PostgreSQL database name
-    ports:
-      - "${ASP_PORT}:${ASP_PORT}"       # Maps the container's port to the host
+#    ports:
+#      - "${ASP_PORT}:${ASP_PORT}"       # Maps the container's port to the host
     restart: never
 
   postgres:
@@ -29,6 +29,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}  # Set PostgreSQL password
       - POSTGRES_USER=${POSTGRES_USER}          # Set PostgreSQL user
       - POSTGRES_DB=${POSTGRES_DB}              # Set PostgreSQL database name
-    ports:
-      - "${POSTGRES_PORT}:5432"  # Exposes PostgreSQL port for access from the host
+#    ports:
+#      - "${POSTGRES_PORT}:5432"  # Exposes PostgreSQL port for access from the host
     restart: unless-stopped
