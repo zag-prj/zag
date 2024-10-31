@@ -1,24 +1,38 @@
 services:
   node-app:
     image: ghcr.io/zag-prj/zag-frontend:latest
-    container_name: zad-frontend
+    container_name: zag-frontend
     environment:
+      - API_BASE_URL=${API_BASE_URL}
+      - ASP_PORT=${ASP_PORT}           # Set ASP.NET environment variable
       - PORT=${NODE_PORT}   # Sets the environment variable for the container
     ports:
-      - ${NODE_PORT}:${NODE_PORT} # Maps port 8080 of the container to port 8080 on the host
+      - "${NODE_PORT}:${NODE_PORT}" # Maps the container's port to the host
+    volumes:
+      - ./ssl:/app/ssl
     restart: unless-stopped
+
   asp-app:
-    image: ghcr.io/tropicsatern36/zag-backend:latest
-    container_name: zad-backend
-    #restart: unless-stopped
-    restart: never
+    image: ghcr.io/zag-prj/zag-backend:latest
+    container_name: zag-backend
+    environment:
+      - ASP_PORT=${ASP_PORT}           # Set ASP.NET environment variable
+      - POSTGRES_HOST=${POSTGRES_HOST}  # Set the PostgreSQL host
+      - POSTGRES_PORT=5432  # Set the PostgreSQL port
+      - POSTGRES_USER=${POSTGRES_USER}  # Set PostgreSQL user
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}  # Set PostgreSQL password
+      - POSTGRES_DB=${POSTGRES_DB}      # Set PostgreSQL database name
+#    ports:
+#      - "${ASP_PORT}:${ASP_PORT}"       # Maps the container's port to the host
+    restart: unless-stopped
+
   postgres:
     image: docker.io/postgres:latest
-    container_name: zad-datalayer
+    container_name: zag-datalayer
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_DB=${POSTGRES_DB}
-    ports:
-      - ${POSTGRES_PORT}:5432 # for asses from host machine. Testing only
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}  # Set PostgreSQL password
+      - POSTGRES_USER=${POSTGRES_USER}          # Set PostgreSQL user
+      - POSTGRES_DB=${POSTGRES_DB}              # Set PostgreSQL database name
+#    ports:
+#      - "${POSTGRES_PORT}:5432"  # Exposes PostgreSQL port for access from the host
     restart: unless-stopped
